@@ -21,6 +21,13 @@ public class FilmDAOImple implements FilmDAO {
 	private String user = "student";
 	private String pass = "student";
 
+//	public JDBCTest() throws ClassNotFoundException {
+//		  Class.forName("com.mysql.cj.jdbc.Driver");
+//		}
+//
+//	public static void main(String[] args) throws SQLException, ClassNotFoundException {
+//		/* ... */ }
+
 	@Override
 	public Film createFilm(Film film) {
 		System.out.println("///////////////////////////////////////////////////////////////////////////////");
@@ -45,7 +52,7 @@ public class FilmDAOImple implements FilmDAO {
 			stmt.setString(10, film.getSpecialFeatures());
 
 			System.out.println(stmt);
-			int updateCount = stmt.executeUpdate();
+			stmt.executeUpdate();
 
 			conn.commit(); // COMMIT TRANSACTION
 		} catch (SQLException sqle) {
@@ -63,7 +70,7 @@ public class FilmDAOImple implements FilmDAO {
 	}
 
 	@Override
-	public boolean saveFilm(Film film) {
+	public boolean updateFilm(Film film) {
 
 		Connection conn = null;
 		try {
@@ -71,33 +78,25 @@ public class FilmDAOImple implements FilmDAO {
 			conn.setAutoCommit(false); // START TRANSACTION
 
 			// dont forget where !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			String sql = "UPDATE actor SET first_name=?, last_name=? " + " WHERE id=?";
+			String sql = "UPDATE film SET title = ?, description = ?, release_year = ?, language_id = ?, rental_duration = ?, rental_rate = ?, length = ?, replacement_cost = ?, rating = ? , special_features = ?"
+					+ " WHERE film.id=?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
-//			stmt.setString(1, actor.getFirstName());
-//			stmt.setString(2, actor.getLastName());
-//			stmt.setInt(3, actor.getId());
+			stmt.setString(1, film.getTitle());
+			stmt.setString(2, film.getDescription());
+			stmt.setShort(3, film.getReleaseYear());
+			stmt.setInt(4, film.getLanguageId());
+			stmt.setInt(5, film.getRentalDuration());
+			stmt.setDouble(6, film.getRentalRate());
+			stmt.setInt(7, film.getLength());
+			stmt.setDouble(8, film.getReplacementCost());
+			stmt.setString(9, film.getRating());
+			stmt.setString(10, film.getSpecialFeatures());
+			stmt.setInt(11, film.getId());
+			stmt.executeUpdate();
+			conn.commit(); // COMMIT TRANSACTION
+		} catch (
 
-			int updateCount = stmt.executeUpdate();
-
-			if (updateCount == 1) {
-				// Replace actor's film list
-				sql = "DELETE FROM film_actor WHERE actor_id = ?";
-				stmt = conn.prepareStatement(sql);
-//				stmt.setInt(1, actor.getId());
-
-				updateCount = stmt.executeUpdate();
-				sql = "INSERT INTO film_actor (film_id, actor_id) VALUES (?,?)";
-				stmt = conn.prepareStatement(sql);
-
-//				for (Film film : actor.getFilms()) {
-//					stmt.setInt(1, film.getId());
-//					stmt.setInt(2, actor.getId());
-//					// for insert update or delete executeUpdate()
-//					updateCount = stmt.executeUpdate();
-//				}
-//				conn.commit(); // COMMIT TRANSACTION
-			}
-		} catch (SQLException sqle) {
+		SQLException sqle) {
 			sqle.printStackTrace();
 			if (conn != null) {
 				try {
@@ -123,17 +122,7 @@ public class FilmDAOImple implements FilmDAO {
 
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, film.getId());
-
-			int updateCount = stmt.executeUpdate();
-
-			// dont forget where !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			sql = "DELETE FROM actor WHERE id = ?";
-			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, film.getId());
-			updateCount = stmt.executeUpdate();
-			if (updateCount != 1) {
-				return false;
-			}
+			stmt.executeUpdate();
 			conn.commit(); // COMMIT TRANSACTION
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();

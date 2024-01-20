@@ -6,6 +6,9 @@
 	<display-name>MVCFilmSite</display-name>
 	<welcome-file-list>
 		<welcome-file>home.do</welcome-file>
+		<welcome-file>addFilm.do</welcome-file>
+		<welcome-file>deleteFilm.do</welcome-file>
+		<welcome-file>showFilmID.do</welcome-file>
 	</welcome-file-list>
 
 
