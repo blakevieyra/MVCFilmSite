@@ -10,13 +10,13 @@
 
 
 	<servlet>
-		<servlet-name>Video Store</servlet-name>
+		<servlet-name>VideoStore</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 	</servlet>
-	
+
 
 	<servlet-mapping>
-		<servlet-name>AdvancedRequests</servlet-name>
+		<servlet-name>VideoStore</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 
