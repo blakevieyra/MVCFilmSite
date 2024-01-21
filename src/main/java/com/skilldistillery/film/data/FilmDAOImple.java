@@ -224,8 +224,15 @@ public class FilmDAOImple implements FilmDAO {
 		List<Actor> actorList = new ArrayList<>();
 		Actor actor = null;
 		try {
-			String sql = "SELECT actor.first_name, actor.last_name FROM actor JOIN film_actor ON actor.id = film_actor.actor_id JOIN film ";
+			String sql = "SELECT actor.id, actor.first_name, actor.last_name FROM actor JOIN film_actor ON actor.id = film_actor.actor_id JOIN film ";
 			sql += "ON film.id = film_actor.film_id WHERE film_id = ?";
+/*The 2 lines above replace the 2 lines below. The error message and stack 
+ 	trace indicated that an exception was occurring within the 
+ 	searchFilmById method of the code. The specific error is related to 
+ 	parsing a string as a number when retrieving data from the database.
+ 	*/	
+//			String sql = "SELECT actor.first_name, actor.last_name FROM actor JOIN film_actor ON actor.id = film_actor.actor_id JOIN film ";
+//			sql += "ON film.id = film_actor.film_id WHERE film_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet rs = stmt.executeQuery();

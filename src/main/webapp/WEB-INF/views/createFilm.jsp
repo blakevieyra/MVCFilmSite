@@ -9,7 +9,7 @@
 <body>Film added!
 </body>
 <p>
-	<a href="/home.jsp"">Return Home</a>
+	<a href="."">Return Home</a>
 </p>
 
 </html>

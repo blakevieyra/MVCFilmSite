@@ -21,11 +21,13 @@ public class MFCFilmSiteController {
 	{
 	}
 
-	@RequestMapping
+	@RequestMapping(path="")
 	private String home() {
 		return "WEB-INF/views/home.jsp";
 	}
+	
 
+	
 	@RequestMapping(path = "addFilm.do", method = RequestMethod.POST)
 	public ModelAndView addFilm(Film film) throws SQLException {
 		filmDao.createFilm(film);

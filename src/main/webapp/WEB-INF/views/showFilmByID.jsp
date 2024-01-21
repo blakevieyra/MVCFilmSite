@@ -18,7 +18,7 @@
 		</c:otherwise>
 	</c:choose>
 	<p>
-		<a href="/home.jsp">Return Home</a>
+<p><a href=".">Return to Home Page</a></p>
 	</p>
 
 </body>
