@@ -154,8 +154,8 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return " Title: " + title + "\n Description: " + description + "\n Release Year: " + releaseYear + "\n Rating: "
-				+ rating + "\n Language: " + language + "\n Actors: " + actors + "\n\n";
+		return "<ul> Title: " + title + "\n Description: " + description + "\n Release Year: " + releaseYear + "\n Rating: "
+				+ rating + "\n Language: " + language + "\n Actors: " + actors + "\n</ul>";
 	}
 
 	@Override
