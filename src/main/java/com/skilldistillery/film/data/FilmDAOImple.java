@@ -18,23 +18,29 @@ import com.skilldistillery.film.entities.Film;
 public class FilmDAOImple implements FilmDAO {
 
 	private static String url = "jdbc:mysql://localhost:3306/sdvid?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=US/Mountain";
-	private String user = "student";
-	private String pass = "student";
 
-//	public JDBCTest() throws ClassNotFoundException {
-//		  Class.forName("com.mysql.cj.jdbc.Driver");
-//		}
-//
-//	public static void main(String[] args) throws SQLException, ClassNotFoundException {
-//		/* ... */ }
+	public FilmDAOImple() throws ClassNotFoundException {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+	}
+
+	public static void main(String[] args) throws SQLException, ClassNotFoundException {
+		FilmDAOImple start = new FilmDAOImple();
+		start.validateConn();
+	}
+
+	private Connection validateConn() throws SQLException {
+		String user = "student";
+		String pass = "student";
+		Connection conn = DriverManager.getConnection(url, user, pass);
+		return conn;
+	}
 
 	@Override
-	public Film createFilm(Film film) {
-		System.out.println("///////////////////////////////////////////////////////////////////////////////");
-		Connection conn = null;
+	public Film createFilm(Film film) throws SQLException {
+		Connection conn = validateConn();
 		try {
-			conn = DriverManager.getConnection(url, user, pass);
-			conn.setAutoCommit(false); // START TRANSACTION
+			conn.setAutoCommit(false);
+			// START TRANSACTION
 
 			String sql = "INSERT INTO film (title, description, release_year, language_id, rental_duration, rental_rate, length, replacement_cost, rating) "
 					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -70,14 +76,12 @@ public class FilmDAOImple implements FilmDAO {
 	}
 
 	@Override
-	public boolean updateFilm(Film film) {
+	public boolean updateFilm(Film film) throws SQLException {
 
-		Connection conn = null;
+		Connection conn = validateConn();
 		try {
-			conn = DriverManager.getConnection(url, user, pass);
-			conn.setAutoCommit(false); // START TRANSACTION
-
-			// dont forget where !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			conn.setAutoCommit(false);
+			// START TRANSACTION
 			String sql = "UPDATE film SET title = ?, description = ?, release_year = ?, language_id = ?, rental_duration = ?, rental_rate = ?, length = ?, replacement_cost = ?, rating = ?"
 					+ " WHERE film.id=?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
@@ -112,18 +116,18 @@ public class FilmDAOImple implements FilmDAO {
 	}
 
 	@Override
-	public boolean deleteFilm(Film film) {
-		Connection conn = null;
+	public boolean deleteFilm(Film film) throws SQLException {
+		Connection conn = validateConn();
 		try {
-			conn = DriverManager.getConnection(url, user, pass);
-			conn.setAutoCommit(false); // START TRANSACTION
-			// dont forget where !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			conn.setAutoCommit(false);
+			// START TRANSACTION
 			String sql = "DELETE FROM film WHERE film.id = ?";
 
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, film.getId());
 			stmt.executeUpdate();
-			conn.commit(); // COMMIT TRANSACTION
+			conn.commit();
+			// COMMIT TRANSACTION
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			if (conn != null) {
@@ -139,12 +143,12 @@ public class FilmDAOImple implements FilmDAO {
 	}
 
 	@Override
-	public Film searchFilmById(int filmId) {
+	public Film searchFilmById(int filmId) throws SQLException {
+		Connection conn = validateConn();
 		Film film = null;
 		List<Actor> actors = new ArrayList<>();
 		try {
 			String sql = "SELECT * FROM film JOIN language ON film.language_id = language.id WHERE film.id = ?";
-			Connection conn = DriverManager.getConnection(url, user, pass);
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet rs = stmt.executeQuery();
@@ -175,13 +179,13 @@ public class FilmDAOImple implements FilmDAO {
 	}
 
 	@Override
-	public List<Film> searchFilmByKeyword(String keyword) {
+	public List<Film> searchFilmByKeyword(String keyword) throws SQLException {
+		Connection conn = validateConn();
 		List<Film> films = new ArrayList<>();
 		Film film = null;
 
 		try {
 			String sql = "SELECT * FROM film JOIN language ON film.language_id  = language.id WHERE film.title LIKE ? OR film.description LIKE ? ORDER BY film.title";
-			Connection conn = DriverManager.getConnection(url, user, pass);
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "%" + keyword + "%");
 			stmt.setString(2, "%" + keyword + "%");
@@ -215,12 +219,11 @@ public class FilmDAOImple implements FilmDAO {
 	}
 
 	@Override
-	public List<Actor> findActorsByFilmId(int filmId) {
-
+	public List<Actor> findActorsByFilmId(int filmId) throws SQLException {
+		Connection conn = validateConn();
 		List<Actor> actorList = new ArrayList<>();
 		Actor actor = null;
 		try {
-			Connection conn = DriverManager.getConnection(url, user, pass);
 			String sql = "SELECT actor.first_name, actor.last_name FROM actor JOIN film_actor ON actor.id = film_actor.actor_id JOIN film ";
 			sql += "ON film.id = film_actor.film_id WHERE film_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);

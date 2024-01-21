@@ -7,7 +7,11 @@
 <title>Welcome to the Film Database</title>
 </head>
 <body>
-	<a href="showFilmbyID.html">Get Film By ID</a>
+	<h1>Please select from one of the below options.</h1>
+	<br>
+	<a href="findFilmID.html">Get Film By ID</a>
+	<br />
+	<a href="findFilmbyKeyword.html">Search for a film By Keyword</a>
 	<br />
 	<a href="createFilm.html">Add a new film</a>
 	<br />
@@ -15,7 +19,6 @@
 	<br />
 	<a href="updateFilm.html">Update a Film</a>
 	<br />
-	<a href="showFilmbyKeyword.html">Get Film By Keyword</a>
-	<br />
+	
 </body>
 </html>
