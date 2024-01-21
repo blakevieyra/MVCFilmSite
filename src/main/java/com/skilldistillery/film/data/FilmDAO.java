@@ -7,9 +7,9 @@ import com.skilldistillery.film.entities.Film;
 
 public interface FilmDAO {
 
-	Film findFilmById(int filmId);
+	Film searchFilmById(int filmId);
 
-	List<Film> searchByKeyword(String keyword);
+	List<Film> searchFilmByKeyword(String keyword);
 
 	List<Actor> findActorsByFilmId(int filmId);
 

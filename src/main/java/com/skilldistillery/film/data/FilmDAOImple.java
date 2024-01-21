@@ -139,7 +139,7 @@ public class FilmDAOImple implements FilmDAO {
 	}
 
 	@Override
-	public Film findFilmById(int filmId) {
+	public Film searchFilmById(int filmId) {
 		Film film = null;
 		List<Actor> actors = new ArrayList<>();
 		try {
@@ -175,7 +175,7 @@ public class FilmDAOImple implements FilmDAO {
 	}
 
 	@Override
-	public List<Film> searchByKeyword(String keyword) {
+	public List<Film> searchFilmByKeyword(String keyword) {
 		List<Film> films = new ArrayList<>();
 		Film film = null;
 
