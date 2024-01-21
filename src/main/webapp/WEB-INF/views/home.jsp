@@ -7,7 +7,7 @@
 <title>Welcome to the Film Database</title>
 </head>
 <body>
-	Please select from one of the below options.
+	<h1>Please select from one of the below options.</h1>
 	<br>
 	<a href="findFilmID.html">Get Film By ID</a>
 	<br />
@@ -19,6 +19,6 @@
 	<br />
 	<a href="updateFilm.html">Update a Film</a>
 	<br />
-	
+
 </body>
 </html>
