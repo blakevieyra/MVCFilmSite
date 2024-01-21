@@ -53,9 +53,28 @@ public class MFCFilmSiteController {
 	}
 
 	@RequestMapping(path = "searchFilmById.do", params = "id", method = RequestMethod.GET)
-	public ModelAndView findFilmByID(@RequestParam("id") int filmID) throws SQLException {
+	public ModelAndView findFilmByID(@RequestParam("id") String filmID) throws SQLException {
 	    ModelAndView mv = new ModelAndView();
-	    Film film = filmDao.searchFilmById(filmID);
+
+	    // Validate the film ID
+	    int id;
+	    try {
+	        id = Integer.parseInt(filmID);
+
+	        if (id <= 0) {
+	            // Invalid film ID (less than or equal to 0)
+	            mv.addObject("message", "Invalid Film ID");
+	            mv.setViewName("WEB-INF/views/showFilmByID.jsp");
+	            return mv;
+	        }
+	    } catch (NumberFormatException e) {
+	        // Invalid film ID (not a valid integer)
+	        mv.addObject("message", "Invalid Film ID");
+	        mv.setViewName("WEB-INF/views/showFilmByID.jsp");
+	        return mv;
+	    }
+
+	    Film film = filmDao.searchFilmById(id);
 
 	    if (film != null) {
 	        // Film found, set it as an attribute
@@ -68,14 +87,9 @@ public class MFCFilmSiteController {
 	    mv.setViewName("WEB-INF/views/showFilmByID.jsp");
 	    return mv;
 	}
-//	@RequestMapping(path = "searchFilmById.do", params = "id", method = RequestMethod.GET)
-//	public ModelAndView findFilmByID(@RequestParam("id") int filmID) throws SQLException {
-//		ModelAndView mv = new ModelAndView();
-//		Film film = filmDao.searchFilmById(filmID);
-//		mv.addObject("film", film);
-//		mv.setViewName("WEB-INF/views/showFilmByID.jsp");
-//		return mv;
-//	}
+
+
+
 
 	@RequestMapping(path = "searchFilmByKeyword.do", params = "keyword", method = RequestMethod.GET)
 	public ModelAndView searchFilmByKeyword(@RequestParam("keyword") String keyword) throws SQLException {
