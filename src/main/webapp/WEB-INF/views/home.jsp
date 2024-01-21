@@ -18,6 +18,8 @@
 	<a href="deleteFilm.html">Delete a film</a>
 	<br />
 	<a href="updateFilm.html">Update a Film</a>
+	<br />	
+	<a href="searchFilm.html">Search Films</a>
 	<br />
 
 </body>
