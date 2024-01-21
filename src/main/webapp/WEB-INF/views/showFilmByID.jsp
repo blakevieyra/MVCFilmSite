@@ -9,7 +9,7 @@
     <c:choose>
         <c:when test="${! empty film}">
             
-              <p>  ${film}</p>
+              <p>${film}</p>
             
         </c:when>
         <c:otherwise>
