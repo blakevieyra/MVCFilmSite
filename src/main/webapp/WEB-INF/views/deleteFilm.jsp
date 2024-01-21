@@ -4,9 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Delete Film</title>
 </head>
 <body>
-Delete film stuff
+Film deleted!
+<p>
+		<a href="WEB-INF/views/home.jsp">Return Home</a>
+	</p>
+	
 </body>
 </html>
