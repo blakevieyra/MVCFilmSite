@@ -54,12 +54,28 @@ public class MFCFilmSiteController {
 
 	@RequestMapping(path = "searchFilmById.do", params = "id", method = RequestMethod.GET)
 	public ModelAndView findFilmByID(@RequestParam("id") int filmID) throws SQLException {
-		ModelAndView mv = new ModelAndView();
-		Film film = filmDao.searchFilmById(filmID);
-		mv.addObject("film", film);
-		mv.setViewName("WEB-INF/views/showFilmByID.jsp");
-		return mv;
+	    ModelAndView mv = new ModelAndView();
+	    Film film = filmDao.searchFilmById(filmID);
+
+	    if (film != null) {
+	        // Film found, set it as an attribute
+	        mv.addObject("film", film);
+	    } else {
+	        // Film not found, set a message
+	        mv.addObject("message", "No Film Found");
+	    }
+
+	    mv.setViewName("WEB-INF/views/showFilmByID.jsp");
+	    return mv;
 	}
+//	@RequestMapping(path = "searchFilmById.do", params = "id", method = RequestMethod.GET)
+//	public ModelAndView findFilmByID(@RequestParam("id") int filmID) throws SQLException {
+//		ModelAndView mv = new ModelAndView();
+//		Film film = filmDao.searchFilmById(filmID);
+//		mv.addObject("film", film);
+//		mv.setViewName("WEB-INF/views/showFilmByID.jsp");
+//		return mv;
+//	}
 
 	@RequestMapping(path = "searchFilmByKeyword.do", params = "keyword", method = RequestMethod.GET)
 	public ModelAndView searchFilmByKeyword(@RequestParam("keyword") String keyword) throws SQLException {
