@@ -13,12 +13,13 @@
 <!-- 	<br /> -->
 <!-- 	<a href="findFilmByKeyword.html">Search for a film By Keyword</a> -->
 <!-- 	<br /> -->
-<!-- 	<a href="createFilm.html">Add a new film</a> -->
-<!-- 	<br /> -->
+
 <!-- 	<a href="deleteFilm.html">Delete a film</a> -->
 <!-- 	<br /> -->
 	
 	<a href="searchFilm.html">Search Films to view, Update, or Delete</a>
+	<br />
+	<a href="createFilm.html">Add a new film</a>
 	<br />
 	<a href="updateFilm.html">Update a Film</a>
 	<br />	

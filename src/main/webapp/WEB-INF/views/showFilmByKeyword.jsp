@@ -16,6 +16,12 @@
 			for="id">ID:</label> <input type="text" name="id"> <input
 			type="submit" value="DELETE"> <br>
 	</form>
+	<form action="updateFilm.do" method="POST">
+    Please enter the film ID of the film you want to update. <br><label
+        for="updateId">ID:</label> <input type="text" name="updateId"> <input
+        type="submit" value="UPDATE"> <br>
+</form>
+	
 	<c:choose>
 		<c:when test="${! empty film}  ">
 			
