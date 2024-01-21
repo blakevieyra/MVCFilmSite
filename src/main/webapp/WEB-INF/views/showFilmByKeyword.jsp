@@ -7,6 +7,15 @@
 <title>Film by keyword</title>
 </head>
 <body>
+<h1>Search Results</h1>
+<p>
+		<a href=".">Return Home</a>
+	</p>
+	<form action="deleteFilm.do" method="POST">
+		Please enter the film ID of the film you want to delete. <br><label
+			for="id">ID:</label> <input type="text" name="id"> <input
+			type="submit" value="DELETE"> <br>
+	</form>
 	<c:choose>
 		<c:when test="${! empty film}  ">
 			
