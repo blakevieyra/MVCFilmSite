@@ -2,11 +2,12 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Add a new film</title>
+    <title>Film Added</title>
 </head>
 <body>
+<<<<<<< HEAD
 Film added!
 </body>
 <p>
@@ -18,3 +19,10 @@ Film added!
 
 </html>
 
+=======
+    <h1>Film Added Successfully</h1>
+    <p>${message}</p>
+    <a href=".">Back to Home</a>
+</body>
+</html>
+>>>>>>> 0a8cb4c345ca1aaeb4782b4870a3e52b4b8e8ed6

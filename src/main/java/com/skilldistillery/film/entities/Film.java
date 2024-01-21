@@ -5,27 +5,28 @@ import java.util.List;
 import java.util.Objects;
 
 public class Film {
-	private int filmId;
-	private String title;
-	private String description;
-	private short releaseYear;
-	private int languageId;
-	private int rentalDuration;
-	private double rentalRate;
-	private int length;
-	private double replacementCost;
-	private String rating;
-	private String specialFeatures;
-	private String language;
+	   private int id;
+	    private String title;
+	    private String description;
+	    private short releaseYear;
+	    private int languageId;
+	    private int rentalDuration;
+	    private double rentalRate;
+	    private int length;
+	    private double replacementCost;
+	    private String rating;
+	    private String specialFeatures;
+	    private String language;
 	private List<Actor> actors = new ArrayList<>();
-
+	private String error;
+	
 	public Film() {
 	}
 
 	public Film(int filmId, String title, String description, short releaseYear, int languageId, int rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
 			String language, List<Actor> actors) {
-		this.filmId = filmId;
+		this.id = filmId;
 		this.title = title;
 		this.description = description;
 		this.releaseYear = releaseYear;
@@ -40,12 +41,19 @@ public class Film {
 		this.actors = actors;
 	}
 
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 	public int getId() {
-		return filmId;
+		return id;
 	}
 
 	public void setId(int filmId) {
-		this.filmId = filmId;
+		this.id = filmId;
 	}
 
 	public String getTitle() {
@@ -152,7 +160,7 @@ public class Film {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(actors, description, filmId, language, languageId, length, rating, releaseYear,
+		return Objects.hash(actors, description, id, language, languageId, length, rating, releaseYear,
 				rentalDuration, rentalRate, replacementCost, specialFeatures, title);
 	}
 
@@ -166,7 +174,7 @@ public class Film {
 			return false;
 		Film other = (Film) obj;
 		return Objects.equals(actors, other.actors) && Objects.equals(description, other.description)
-				&& filmId == other.filmId && Objects.equals(language, other.language) && languageId == other.languageId
+				&& id == other.id && Objects.equals(language, other.language) && languageId == other.languageId
 				&& length == other.length && Objects.equals(rating, other.rating) && releaseYear == other.releaseYear
 				&& rentalDuration == other.rentalDuration
 				&& Double.doubleToLongBits(rentalRate) == Double.doubleToLongBits(other.rentalRate)

@@ -37,43 +37,77 @@ public class FilmDAOImple implements FilmDAO {
 
 	@Override
 	public Film createFilm(Film film) throws SQLException {
-		Connection conn = validateConn();
-		try {
-			conn.setAutoCommit(false);
-			// START TRANSACTION
+	    Connection conn = validateConn();
+	    try {
+	        conn.setAutoCommit(false); // START TRANSACTION
 
-			String sql = "INSERT INTO film (title, description, release_year, language_id, rental_duration, rental_rate, length, replacement_cost, rating) "
-					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	        // Check for duplicate titles in a case-insensitive manner
+	        String checkSql = "SELECT COUNT(*) FROM film WHERE UPPER(title) = ?";
+	        PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+	        checkStmt.setString(1, film.getTitle().toUpperCase());
+	        ResultSet resultSet = checkStmt.executeQuery();
+	        resultSet.next();
+	        int rowCount = resultSet.getInt(1);
+	        checkStmt.close();
 
-			stmt.setString(1, film.getTitle());
-			stmt.setString(2, film.getDescription());
-			stmt.setShort(3, film.getReleaseYear());
-			stmt.setInt(4, film.getLanguageId());
-			stmt.setInt(5, film.getRentalDuration());
-			stmt.setDouble(6, film.getRentalRate());
-			stmt.setInt(7, film.getLength());
-			stmt.setDouble(8, film.getReplacementCost());
-			stmt.setString(9, film.getRating());
-			stmt.setString(10, film.getSpecialFeatures());
+	        if (rowCount > 0) {
+	            // Duplicate title found, handle it accordingly (e.g., return a custom error message)
+	            film.setError("Film with the same title already exists.");
+	            return film; // Return the Film object with the error message
+	        }
 
-			System.out.println(stmt);
-			stmt.executeUpdate();
+	        // If no duplicate title found, proceed with the insertion
+	        String sql = "INSERT INTO film (title, description, release_year, language_id, rental_duration, "
+	                   + "rental_rate, length, replacement_cost, rating, special_features) "
+	                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	        PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-			conn.commit(); // COMMIT TRANSACTION
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			if (conn != null) {
-				try {
-					conn.rollback();
-				} catch (SQLException sqle2) {
-					System.err.println("Error trying to rollback");
-				}
-			}
-			throw new RuntimeException("Error inserting film " + film);
-		}
-		return film;
+	        // Convert the title to uppercase before inserting
+	        String title = film.getTitle().toUpperCase();
+	        stmt.setString(1, title);
+	        stmt.setString(2, film.getDescription());
+	        stmt.setShort(3, film.getReleaseYear());
+	        stmt.setInt(4, film.getLanguageId());
+	        stmt.setInt(5, film.getRentalDuration());
+	        stmt.setDouble(6, film.getRentalRate());
+	        stmt.setInt(7, film.getLength());
+	        stmt.setDouble(8, film.getReplacementCost());
+	        stmt.setString(9, film.getRating());
+	        stmt.setString(10, film.getSpecialFeatures());
+
+	        int rowsAffected = stmt.executeUpdate();
+	        if (rowsAffected == 1) {
+	            ResultSet generatedKeys = stmt.getGeneratedKeys();
+	            if (generatedKeys.next()) {
+	                int generatedId = generatedKeys.getInt(1);
+	                film.setId(generatedId);
+	            } else {
+	                conn.rollback(); // ROLLBACK TRANSACTION
+	                throw new SQLException("Insertion failed, no generated ID obtained.");
+	            }
+	            conn.commit(); // COMMIT TRANSACTION
+	        } else {
+	            conn.rollback(); // ROLLBACK TRANSACTION
+	            throw new SQLException("Insertion failed, no rows affected.");
+	        }
+	    } catch (SQLException sqle) {
+	        sqle.printStackTrace();
+	        if (conn != null) {
+	            try {
+	                conn.rollback(); // ROLLBACK TRANSACTION
+	            } catch (SQLException sqle2) {
+	                System.err.println("Error trying to rollback");
+	            }
+	        }
+	        throw new RuntimeException("Error inserting film " + film, sqle);
+	    } finally {
+	        if (conn != null) {
+	            conn.setAutoCommit(true); // Reset auto-commit to true
+	        }
+	    }
+	    return film;
 	}
+
 
 	@Override
 	public boolean updateFilm(Film film) throws SQLException {
