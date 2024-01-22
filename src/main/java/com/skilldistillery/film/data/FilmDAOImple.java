@@ -182,23 +182,32 @@ public class FilmDAOImple implements FilmDAO {
 			stmt.setInt(1, film.getId());
 
 			updateCount = stmt.executeUpdate();
+			
+			sql = "DELETE rental\n"
+					+ "FROM rental\n"
+					+ "JOIN inventory_item ON rental.inventory_id = inventory_item.id\n"
+					+ "WHERE inventory_item.film_id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, film.getId());
 
+			updateCount = stmt.executeUpdate();
+			
 			sql = "DELETE FROM inventory_item WHERE inventory_item.film_id = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, film.getId());
 
 			updateCount = stmt.executeUpdate();
 
-			sql = "DELETE FROM inventory_item WHERE inventory_item.id = ?";
-			stmt = conn.prepareStatement(sql);
-			// stmt.setInt(1, film.getId());
-
-			updateCount = stmt.executeUpdate();
+//			sql = "DELETE FROM inventory_item WHERE inventory_item.id = ?";
+//			stmt = conn.prepareStatement(sql);
+//			// stmt.setInt(1, film.getId());
+//
+//			updateCount = stmt.executeUpdate();
 //java.sql.SQLIntegrityConstraintViolationException: Cannot delete or update a parent row: a foreign key constraint fails (`sdvid`.`rental`, CONSTRAINT `fk_rental_inventory` FOREIGN KEY (`inventory_id`) REFERENCES `inventory_item` (`id`) ON UPDATE CASCADE)
 //keep getting this error
-			sql = "DELETE FROM rental WHERE rental.inventory_id = ?";
-			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, film.getId());
+//			sql = "DELETE FROM rental WHERE rental.inventory_id = ?";
+//			stmt = conn.prepareStatement(sql);
+//			stmt.setInt(1, film.getId());
 
 			updateCount = stmt.executeUpdate();
 
