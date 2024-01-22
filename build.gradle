@@ -20,6 +20,9 @@ repositories {
 
 dependencies {
     implementation group: 'org.springframework', name: 'spring-webmvc', version:"$springVersion"
+    // For JSTL
+        implementation 'jakarta.servlet:jstl:2.0.0'
+    
     
     // For JSP views
     implementation group: 'jakarta.servlet.jsp.jstl', name: 'jakarta.servlet.jsp.jstl-api', version: '3.0.0'
