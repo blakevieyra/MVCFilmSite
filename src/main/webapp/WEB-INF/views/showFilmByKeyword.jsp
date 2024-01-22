@@ -10,6 +10,8 @@
 <h1>Search Results</h1>
 <p>
 		<a href=".">Return Home</a>
+	</p><p>
+		<a href="searchFilm.html">Search Again</a>
 	</p>
 	<form action="deleteFilm.do" method="POST">
 		Please enter the film ID of the film you want to delete. <br><label
