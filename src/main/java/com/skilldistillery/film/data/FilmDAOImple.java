@@ -37,77 +37,77 @@ public class FilmDAOImple implements FilmDAO {
 
 	@Override
 	public Film createFilm(Film film) throws SQLException {
-	    Connection conn = validateConn();
-	    try {
-	        conn.setAutoCommit(false); // START TRANSACTION
+		Connection conn = validateConn();
+		try {
+			conn.setAutoCommit(false); // START TRANSACTION
 
-	        // Check for duplicate titles in a case-insensitive manner
-	        String checkSql = "SELECT COUNT(*) FROM film WHERE UPPER(title) = ?";
-	        PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-	        checkStmt.setString(1, film.getTitle().toUpperCase());
-	        ResultSet resultSet = checkStmt.executeQuery();
-	        resultSet.next();
-	        int rowCount = resultSet.getInt(1);
-	        checkStmt.close();
+			// Check for duplicate titles in a case-insensitive manner
+			String checkSql = "SELECT COUNT(*) FROM film WHERE UPPER(title) = ?";
+			PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+			checkStmt.setString(1, film.getTitle().toUpperCase());
+			ResultSet resultSet = checkStmt.executeQuery();
+			resultSet.next();
+			int rowCount = resultSet.getInt(1);
+			checkStmt.close();
 
-	        if (rowCount > 0) {
-	            // Duplicate title found, handle it accordingly (e.g., return a custom error message)
-	            film.setError("Film with the same title already exists.");
-	            return film; // Return the Film object with the error message
-	        }
+			if (rowCount > 0) {
+				// Duplicate title found, handle it accordingly (e.g., return a custom error
+				// message)
+				film.setError("Film with the same title already exists.");
+				return film; // Return the Film object with the error message
+			}
 
-	        // If no duplicate title found, proceed with the insertion
-	        String sql = "INSERT INTO film (title, description, release_year, language_id, rental_duration, "
-	                   + "rental_rate, length, replacement_cost, rating, special_features) "
-	                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	        PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			// If no duplicate title found, proceed with the insertion
+			String sql = "INSERT INTO film (title, description, release_year, language_id, rental_duration, "
+					+ "rental_rate, length, replacement_cost, rating, special_features) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-	        // Convert the title to uppercase before inserting
-	        String title = film.getTitle().toUpperCase();
-	        stmt.setString(1, title);
-	        stmt.setString(2, film.getDescription());
-	        stmt.setShort(3, film.getReleaseYear());
-	        stmt.setInt(4, film.getLanguageId());
-	        stmt.setInt(5, film.getRentalDuration());
-	        stmt.setDouble(6, film.getRentalRate());
-	        stmt.setInt(7, film.getLength());
-	        stmt.setDouble(8, film.getReplacementCost());
-	        stmt.setString(9, film.getRating());
-	        stmt.setString(10, film.getSpecialFeatures());
+			// Convert the title to uppercase before inserting
+			String title = film.getTitle().toUpperCase();
+			stmt.setString(1, title);
+			stmt.setString(2, film.getDescription());
+			stmt.setShort(3, film.getReleaseYear());
+			stmt.setInt(4, film.getLanguageId());
+			stmt.setInt(5, film.getRentalDuration());
+			stmt.setDouble(6, film.getRentalRate());
+			stmt.setInt(7, film.getLength());
+			stmt.setDouble(8, film.getReplacementCost());
+			stmt.setString(9, film.getRating());
+			stmt.setString(10, film.getSpecialFeatures());
 
-	        int rowsAffected = stmt.executeUpdate();
-	        if (rowsAffected == 1) {
-	            ResultSet generatedKeys = stmt.getGeneratedKeys();
-	            if (generatedKeys.next()) {
-	                int generatedId = generatedKeys.getInt(1);
-	                film.setId(generatedId);
-	            } else {
-	                conn.rollback(); // ROLLBACK TRANSACTION
-	                throw new SQLException("Insertion failed, no generated ID obtained.");
-	            }
-	            conn.commit(); // COMMIT TRANSACTION
-	        } else {
-	            conn.rollback(); // ROLLBACK TRANSACTION
-	            throw new SQLException("Insertion failed, no rows affected.");
-	        }
-	    } catch (SQLException sqle) {
-	        sqle.printStackTrace();
-	        if (conn != null) {
-	            try {
-	                conn.rollback(); // ROLLBACK TRANSACTION
-	            } catch (SQLException sqle2) {
-	                System.err.println("Error trying to rollback");
-	            }
-	        }
-	        throw new RuntimeException("Error inserting film " + film, sqle);
-	    } finally {
-	        if (conn != null) {
-	            conn.setAutoCommit(true); // Reset auto-commit to true
-	        }
-	    }
-	    return film;
+			int rowsAffected = stmt.executeUpdate();
+			if (rowsAffected == 1) {
+				ResultSet generatedKeys = stmt.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					int generatedId = generatedKeys.getInt(1);
+					film.setId(generatedId);
+				} else {
+					conn.rollback(); // ROLLBACK TRANSACTION
+					throw new SQLException("Insertion failed, no generated ID obtained.");
+				}
+				conn.commit(); // COMMIT TRANSACTION
+			} else {
+				conn.rollback(); // ROLLBACK TRANSACTION
+				throw new SQLException("Insertion failed, no rows affected.");
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			if (conn != null) {
+				try {
+					conn.rollback(); // ROLLBACK TRANSACTION
+				} catch (SQLException sqle2) {
+					System.err.println("Error trying to rollback");
+				}
+			}
+			throw new RuntimeException("Error inserting film " + film, sqle);
+		} finally {
+			if (conn != null) {
+				conn.setAutoCommit(true); // Reset auto-commit to true
+			}
+		}
+		return film;
 	}
-
 
 	@Override
 	public boolean updateFilm(Film film) throws SQLException {
@@ -116,8 +116,9 @@ public class FilmDAOImple implements FilmDAO {
 		try {
 			conn.setAutoCommit(false);
 			// START TRANSACTION
-			String sql = "UPDATE film SET title = ?, description = ?, release_year = ?, language_id = ?, rental_duration = ?, rental_rate = ?, length = ?, replacement_cost = ?, rating = ?"
-					+ " WHERE film.id=?";
+			String sql = "UPDATE film SET title = ?, description = ?, release_year = ?, language_id  = ?,"
+					+ "rental_duration = ?, rental_rate = ?, length = ?, replacement_cost = ?, rating = ?, special_features = ?"
+					+ " WHERE film.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, film.getTitle());
 			stmt.setString(2, film.getDescription());
@@ -130,8 +131,19 @@ public class FilmDAOImple implements FilmDAO {
 			stmt.setString(9, film.getRating());
 			stmt.setString(10, film.getSpecialFeatures());
 			stmt.setInt(11, film.getId());
-			stmt.executeUpdate();
+
+			int updateCount = stmt.executeUpdate();
+
+			if (updateCount == 1) {
+				// Replace actor's film list
+				sql = "DELETE FROM film_actor WHERE film_actor.film_id = ?";
+				stmt = conn.prepareStatement(sql);
+				stmt.setInt(1, film.getId());
+
+				updateCount = stmt.executeUpdate();
+			}
 			conn.commit(); // COMMIT TRANSACTION
+
 		} catch (
 
 		SQLException sqle) {
@@ -155,13 +167,51 @@ public class FilmDAOImple implements FilmDAO {
 		try {
 			conn.setAutoCommit(false);
 			// START TRANSACTION
-			String sql = "DELETE FROM film WHERE film.id = ?";
 
+			// deleteing foreign key children before deleting parent key, hope to resolve
+			// the
+			// issue
+			String sql = "DELETE FROM film_actor WHERE film_actor.film_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, film.getId());
-			stmt.executeUpdate();
-			conn.commit();
-			// COMMIT TRANSACTION
+
+			int updateCount = stmt.executeUpdate();
+
+			sql = "DELETE FROM film_category WHERE film_category.film_id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, film.getId());
+
+			updateCount = stmt.executeUpdate();
+
+			sql = "DELETE FROM inventory_item WHERE inventory_item.film_id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, film.getId());
+
+			updateCount = stmt.executeUpdate();
+
+			sql = "DELETE FROM inventory_item WHERE inventory_item.id = ?";
+			stmt = conn.prepareStatement(sql);
+			// stmt.setInt(1, film.getId());
+
+			updateCount = stmt.executeUpdate();
+//java.sql.SQLIntegrityConstraintViolationException: Cannot delete or update a parent row: a foreign key constraint fails (`sdvid`.`rental`, CONSTRAINT `fk_rental_inventory` FOREIGN KEY (`inventory_id`) REFERENCES `inventory_item` (`id`) ON UPDATE CASCADE)
+//keep getting this error
+			sql = "DELETE FROM rental WHERE rental.inventory_id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, film.getId());
+
+			updateCount = stmt.executeUpdate();
+
+			sql = "DELETE FROM film WHERE film.id= ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, film.getId());
+
+			updateCount = stmt.executeUpdate();
+			if (updateCount != 1) {
+				return false;
+			}
+			conn.commit(); // COMMIT TRANSACTION
+
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			if (conn != null) {
@@ -260,11 +310,12 @@ public class FilmDAOImple implements FilmDAO {
 		try {
 			String sql = "SELECT actor.id, actor.first_name, actor.last_name FROM actor JOIN film_actor ON actor.id = film_actor.actor_id JOIN film ";
 			sql += "ON film.id = film_actor.film_id WHERE film_id = ?";
-/*The 2 lines above replace the 2 lines below. The error message and stack 
- 	trace indicated that an exception was occurring within the 
- 	searchFilmById method of the code. The specific error is related to 
- 	parsing a string as a number when retrieving data from the database.
- 	*/	
+			/*
+			 * The 2 lines above replace the 2 lines below. The error message and stack
+			 * trace indicated that an exception was occurring within the searchFilmById
+			 * method of the code. The specific error is related to parsing a string as a
+			 * number when retrieving data from the database.
+			 */
 //			String sql = "SELECT actor.first_name, actor.last_name FROM actor JOIN film_actor ON actor.id = film_actor.actor_id JOIN film ";
 //			sql += "ON film.id = film_actor.film_id WHERE film_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);

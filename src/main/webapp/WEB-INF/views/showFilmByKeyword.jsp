@@ -9,11 +9,9 @@
 </head>
 <body>
 <h1>Search Results=</h1>
+
 <p>
-	<a href=".">Return Home</a>
-</p>
-<p>
-	<a href="searchFilm.html">Search Again</a>
+	<a href="SearchFilm.html">Search Again</a>
 </p>
 
 <c:if test="${not empty film}">
@@ -22,7 +20,7 @@
             for="id">ID:</label> <input type="text" name="id"> <input
             type="submit" value="DELETE"> <br>
     </form>
-    <form action="updateFilm.do" method="POST">
+    <form action="updateFilm.html">
         Please enter the film ID of the film you want to update. <br><label
             for="updateId">ID:</label> <input type="text" name="updateId"> <input
             type="submit" value="UPDATE"> <br>
