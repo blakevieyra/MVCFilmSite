@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,7 @@ public class MFCFilmSiteController {
 	public ModelAndView addFilm(Film film) throws SQLException {
 		filmDao.createFilm(film);
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("WEB-INF/views/createFilm.jsp");
+		mv.setViewName("WEB-INF/views/confirmationPage.jsp");
 		return mv;
 	}
 
@@ -40,17 +41,36 @@ public class MFCFilmSiteController {
 	public ModelAndView updateFilm(Film film) throws SQLException {
 		filmDao.updateFilm(film);
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("WEB-INF/views/updateFilm.jsp");
+		mv.setViewName("WEB-INF/views/confirmationPage.jsp");
 		return mv;
 	}
 
 	@RequestMapping(path = "deleteFilm.do", method = RequestMethod.POST)
-	public ModelAndView deleteFilm(Film film) throws SQLException {
-		filmDao.deleteFilm(film);
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("WEB-INF/views/deleteFilm.jsp");
-		return mv;
+	public ModelAndView deleteFilm(@RequestParam("id") int filmId) throws SQLException {
+	    ModelAndView mv = new ModelAndView();
+	    
+	    // Check if the film exists in your database based on the filmId
+	    Film filmToDelete = filmDao.searchFilmById(filmId); // Modify this line to match your actual DAO method
+	    
+	    if (filmToDelete != null) {
+	        boolean deleted = filmDao.deleteFilm(filmToDelete); // Modify this line to match your actual DAO method
+	    
+	        if (deleted) {
+	            // If deletion is successful, redirect to the confirmation page
+	    		mv.setViewName("WEB-INF/views/confirmationPage.jsp");
+	        } else {
+	            // If deletion fails, redirect to an error page
+	            mv.setViewName("redirect:/errorPage");
+	        }
+	    } else {
+	        // If the film doesn't exist, redirect to an error page
+	        mv.setViewName("redirect:/errorPage");
+	    }
+	    
+	    return mv;
 	}
+
+	
 
 	@RequestMapping(path = "searchFilmById.do", params = "id", method = RequestMethod.GET)
 	public ModelAndView findFilmByID(@RequestParam("id") String filmID) throws SQLException {
@@ -99,4 +119,16 @@ public class MFCFilmSiteController {
 		mv.setViewName("WEB-INF/views/showFilmByKeyword.jsp");
 		return mv;
 	}
+	@Controller
+	public class ConfirmationController {
+
+	    @GetMapping("/confirmation")
+	    public ModelAndView showConfirmationPage() {
+	        ModelAndView mv = new ModelAndView();
+
+	        mv.setViewName("WEB-INF/views/confirmationPage.jsp");
+	        return mv;
+	    }
+	}
+
 }
